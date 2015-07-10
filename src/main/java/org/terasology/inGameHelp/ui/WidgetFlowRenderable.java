@@ -62,7 +62,10 @@ public class WidgetFlowRenderable implements FlowRenderable<WidgetFlowRenderable
 
     @Override
     public SplitResult<WidgetFlowRenderable> splitAt(TextRenderStyle defaultRenderStyle, int splitResultWidth) {
-        // This cannot be split
-        return new SplitResult<>(this, null);
+        if (splitResultWidth < width) {
+            return new SplitResult<>(null, this);
+        } else {
+            return new SplitResult<>(this, null);
+        }
     }
 }

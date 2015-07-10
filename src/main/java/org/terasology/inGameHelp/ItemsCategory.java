@@ -93,8 +93,6 @@ public class ItemsCategory implements HelpCategory {
             // add this to the root document
             itemListParagraph.append(new WidgetFlowRenderable(new ItemWidget(itemPrefab.getName()), 48, 48, itemPrefab.getName()));
         }
-
-        currentDocument = rootDocument;
     }
 
     @Override
@@ -104,15 +102,17 @@ public class ItemsCategory implements HelpCategory {
 
     @Override
     public DocumentData getDocumentData() {
+        initialise();
         if (currentDocument == null) {
-            initialise();
+            return rootDocument;
+        } else {
+            return currentDocument;
         }
-        return currentDocument;
     }
 
     @Override
     public void resetNavigation() {
-        currentDocument = rootDocument;
+        currentDocument = null;
     }
 
     @Override
