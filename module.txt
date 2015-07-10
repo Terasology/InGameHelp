@@ -1,0 +1,9 @@
+{
+    "id" : "InGameHelp",
+    "version" : "0.1.0-SNAPSHOT",
+    "author" : "Josharias",
+    "displayName" : "In Game Help",
+    "description" : "",
+    "dependencies" : [],
+    "serverSideOnly" : false
+}

@@ -1,0 +1,49 @@
+{
+  "type": "InGameHelp:InGameHelpScreen",
+  "skin": "InGameHelp:InGameHelp",
+  "contents": {
+    "type": "RowLayout",
+    "contents": [
+      {
+        "type": "RelativeLayout",
+        "contents": [
+          {
+            "type": "ScrollableArea",
+            "id": "mainContent",
+            "content": {
+              "type": "BrowserWidget",
+              "id": "browser"
+            },
+            "layoutInfo": {
+              "width": 600,
+              "height": 500,
+              "position-vertical-center": {
+              },
+              "position-horizontal-center": {
+              }
+            }
+          },
+          {
+            "type": "FlowLayout",
+            "id": "categoryButtons",
+            "layoutInfo": {
+              "use-content-height": true,
+              "position-bottom": {
+                "target": "TOP",
+                "widget": "mainContent"
+              },
+              "position-left": {
+                "target": "LEFT",
+                "widget": "mainContent"
+              },
+              "position-right": {
+                "target": "RIGHT",
+                "widget": "mainContent"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
