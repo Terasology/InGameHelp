@@ -13,10 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.inGameHelp.systems;
+package org.terasology.inGameHelp;
 
-public interface InGameHelpCategoryRegistry {
-    Iterable<HelpCategory> getCategories();
+import org.terasology.entitySystem.prefab.Prefab;
+import org.terasology.inGameHelp.components.HelpItem;
 
-    void registerCategory(HelpCategory category);
+public interface ItemsCategoryInGameHelpRegistry {
+    void addKnownPrefab(Prefab prefab, HelpItem... helpItems);
+
+    Iterable<Prefab> getKnownPrefabs();
+
+    Iterable<HelpItem> getHelpItems(Prefab prefab);
 }

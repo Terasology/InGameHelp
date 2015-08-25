@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.inGameHelp;
+package org.terasology.inGameHelp.helpCategories;
 
 import org.terasology.asset.Assets;
 import org.terasology.assets.ResourceUrn;

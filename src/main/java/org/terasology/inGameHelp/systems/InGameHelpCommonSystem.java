@@ -17,8 +17,11 @@ package org.terasology.inGameHelp.systems;
 
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.inGameHelp.GeneralHelpCategory;
-import org.terasology.inGameHelp.ItemsCategory;
+import org.terasology.inGameHelp.InGameHelpCategoryRegistry;
+import org.terasology.inGameHelp.ItemsCategoryInGameHelpRegistry;
+import org.terasology.inGameHelp.helpCategories.GeneralHelpCategory;
+import org.terasology.inGameHelp.helpCategories.ItemsCategory;
+import org.terasology.registry.In;
 import org.terasology.registry.Share;
 
 import java.util.ArrayList;
@@ -27,6 +30,9 @@ import java.util.List;
 @RegisterSystem
 @Share(InGameHelpCategoryRegistry.class)
 public class InGameHelpCommonSystem extends BaseComponentSystem implements InGameHelpCategoryRegistry {
+    @In
+    ItemsCategoryInGameHelpRegistry itemsCategoryInGameHelpRegistry;
+
     List<HelpCategory> categories = new ArrayList<>();
 
     @Override
@@ -44,6 +50,6 @@ public class InGameHelpCommonSystem extends BaseComponentSystem implements InGam
         super.initialise();
 
         registerCategory(new GeneralHelpCategory());
-        registerCategory(new ItemsCategory());
+        registerCategory(new ItemsCategory(itemsCategoryInGameHelpRegistry));
     }
 }

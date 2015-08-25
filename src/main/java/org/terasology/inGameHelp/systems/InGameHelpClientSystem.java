@@ -32,7 +32,7 @@ public class InGameHelpClientSystem extends BaseComponentSystem {
     NUIManager nuiManager;
 
     @ReceiveEvent(components = ClientComponent.class)
-    public void onEventualSkillsButton(InGameHelpButton event, EntityRef entity) {
+    public void onInGameHelpButton(InGameHelpButton event, EntityRef entity) {
         if (event.getState() == ButtonState.DOWN) {
             nuiManager.toggleScreen("InGameHelp:InGameHelpScreen");
             event.consume();

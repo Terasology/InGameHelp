@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.inGameHelp;
+package org.terasology.inGameHelp.helpCategories;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import org.terasology.asset.Assets;
 import org.terasology.entitySystem.prefab.Prefab;
+import org.terasology.inGameHelp.ItemsCategoryInGameHelpRegistry;
 import org.terasology.inGameHelp.components.HelpItem;
 import org.terasology.inGameHelp.components.ItemHelpComponent;
 import org.terasology.inGameHelp.systems.HelpCategory;
@@ -36,12 +37,16 @@ import org.terasology.rendering.nui.widgets.browser.ui.style.ParagraphRenderStyl
 import org.terasology.rendering.nui.widgets.browser.ui.style.TextRenderStyle;
 
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class ItemsCategory implements HelpCategory {
+    private final ItemsCategoryInGameHelpRegistry itemsCategoryInGameHelpRegistry;
     Map<String, DocumentData> items = Maps.newHashMap();
     HTMLDocument rootDocument;
     DocumentData currentDocument;
+
+    public ItemsCategory(ItemsCategoryInGameHelpRegistry itemsCategoryInGameHelpRegistry) {
+        this.itemsCategoryInGameHelpRegistry = itemsCategoryInGameHelpRegistry;
+    }
 
     private void initialise() {
         TextRenderStyle titleRenderStyle = new TextRenderStyle() {
@@ -62,12 +67,13 @@ public class ItemsCategory implements HelpCategory {
         FlowParagraphData itemListParagraph = new FlowParagraphData(null);
         rootDocument.addParagraph(itemListParagraph);
 
-        for (Prefab itemPrefab : Assets.list(Prefab.class).stream()
-                .map(x -> Assets.get(x, Prefab.class).get())
-                .filter(x -> x.hasComponent(ItemHelpComponent.class))
-                .collect(Collectors.toList())) {
+        for (Prefab itemPrefab : itemsCategoryInGameHelpRegistry.getKnownPrefabs()) {
             HTMLDocument documentData = new HTMLDocument(null);
-            HelpItem helpComponent = itemPrefab.getComponent(ItemHelpComponent.class);
+            ItemHelpComponent helpComponent = itemPrefab.getComponent(ItemHelpComponent.class);
+            if (helpComponent == null) {
+                helpComponent = new ItemHelpComponent();
+                helpComponent.paragraphText.add("An unknown item.");
+            }
 
             FlowParagraphData imageNameParagraph = new FlowParagraphData(null);
             documentData.addParagraph(imageNameParagraph);
@@ -81,11 +87,16 @@ public class ItemsCategory implements HelpCategory {
 
             helpComponent.addHelpItemSection(documentData);
 
-            // add all the other ones
+            // add all the other ones from components
             for (HelpItem helpItem : Iterables.filter(itemPrefab.iterateComponents(), HelpItem.class)) {
                 if (helpItem != helpComponent) {
                     helpItem.addHelpItemSection(documentData);
                 }
+            }
+
+            // add all the other ones from code registered HelpItems
+            for (HelpItem helpItem : itemsCategoryInGameHelpRegistry.getHelpItems(itemPrefab)) {
+                helpItem.addHelpItemSection(documentData);
             }
 
             items.put(itemPrefab.getName(), documentData);
