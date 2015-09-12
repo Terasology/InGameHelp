@@ -21,13 +21,17 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.inGameHelp.InGameHelpButton;
+import org.terasology.inGameHelp.InGameHelpClient;
+import org.terasology.inGameHelp.ui.InGameHelpScreen;
 import org.terasology.input.ButtonState;
 import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
+import org.terasology.registry.Share;
 import org.terasology.rendering.nui.NUIManager;
 
 @RegisterSystem(RegisterMode.CLIENT)
-public class InGameHelpClientSystem extends BaseComponentSystem {
+@Share(InGameHelpClient.class)
+public class InGameHelpClientSystem extends BaseComponentSystem implements InGameHelpClient {
     @In
     NUIManager nuiManager;
 
@@ -36,6 +40,18 @@ public class InGameHelpClientSystem extends BaseComponentSystem {
         if (event.getState() == ButtonState.DOWN) {
             nuiManager.toggleScreen("InGameHelp:InGameHelpScreen");
             event.consume();
+        }
+    }
+
+    @Override
+    public void showHelpForHyperlink(String hyperlink) {
+        InGameHelpScreen screen = (InGameHelpScreen) nuiManager.getScreen("InGameHelp:InGameHelpScreen");
+        if (screen == null) {
+            screen = (InGameHelpScreen) nuiManager.pushScreen("InGameHelp:InGameHelpScreen");
+        }
+        screen.navigateTo(hyperlink);
+        if (!nuiManager.isOpen("InGameHelp:InGameHelpScreen")) {
+            nuiManager.toggleScreen("InGameHelp:InGameHelpScreen");
         }
     }
 }

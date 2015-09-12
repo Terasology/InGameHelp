@@ -51,12 +51,7 @@ public class InGameHelpScreen extends CoreScreenLayer {
             browser.addBrowserHyperlinkListener(new BrowserHyperlinkListener() {
                 @Override
                 public void hyperlinkClicked(String hyperlink) {
-                    for (HelpCategory helpCategory : categories) {
-                        if (helpCategory.handleNavigate(hyperlink)) {
-                            browser.navigateTo(helpCategory.getDocumentData());
-                            break;
-                        }
-                    }
+                    navigateTo(hyperlink);
                 }
             });
         }
@@ -66,6 +61,15 @@ public class InGameHelpScreen extends CoreScreenLayer {
             break;
         }
 
+    }
+
+    public void navigateTo(String hyperlink) {
+        for (HelpCategory helpCategory : categories) {
+            if (helpCategory.handleNavigate(hyperlink)) {
+                browser.navigateTo(helpCategory.getDocumentData());
+                break;
+            }
+        }
     }
 
     private void navigateTo(HelpCategory category) {
