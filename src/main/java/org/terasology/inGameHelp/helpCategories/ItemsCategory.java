@@ -128,6 +128,11 @@ public class ItemsCategory implements HelpCategory {
 
     @Override
     public boolean handleNavigate(String hyperlink) {
+        if (items.size() == 0) {
+            // handle the case where we navigate before we have shown the screen.  There is probably a better way to do this.
+            initialise();
+        }
+
         if (items.containsKey(hyperlink)) {
             currentDocument = items.get(hyperlink);
             return true;
