@@ -22,9 +22,12 @@ import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.inGameHelp.InGameHelpButton;
 import org.terasology.inGameHelp.InGameHelpClient;
+import org.terasology.inGameHelp.components.HasBeenHelpedComponent;
 import org.terasology.inGameHelp.ui.InGameHelpScreen;
 import org.terasology.input.ButtonState;
+import org.terasology.logic.players.LocalPlayer;
 import org.terasology.network.ClientComponent;
+import org.terasology.registry.CoreRegistry;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.rendering.nui.NUIManager;
@@ -35,9 +38,21 @@ public class InGameHelpClientSystem extends BaseComponentSystem implements InGam
     @In
     NUIManager nuiManager;
 
+    @Override
+    public void initialise() {
+        super.initialise();
+        nuiManager.getHUD().addHUDElement("InGameHelp:UnHelpedNagWidget");
+    }
+
     @ReceiveEvent(components = ClientComponent.class)
     public void onInGameHelpButton(InGameHelpButton event, EntityRef entity) {
         if (event.getState() == ButtonState.DOWN) {
+
+            EntityRef targetEntity = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
+            if (!targetEntity.hasComponent(HasBeenHelpedComponent.class)) {
+                targetEntity.addComponent(new HasBeenHelpedComponent());
+            }
+
             nuiManager.toggleScreen("InGameHelp:InGameHelpScreen");
             event.consume();
         }
