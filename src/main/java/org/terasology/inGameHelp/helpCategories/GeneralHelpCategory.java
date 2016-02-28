@@ -15,7 +15,7 @@
  */
 package org.terasology.inGameHelp.helpCategories;
 
-import org.terasology.asset.Assets;
+import org.terasology.utilities.Assets;
 import org.terasology.assets.ResourceUrn;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.inGameHelp.components.GeneralHelpComponent;

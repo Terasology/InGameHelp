@@ -15,7 +15,7 @@
  */
 package org.terasology.inGameHelp.ui;
 
-import org.terasology.asset.Assets;
+import org.terasology.utilities.Assets;
 import org.terasology.rendering.assets.font.Font;
 import org.terasology.rendering.nui.widgets.browser.ui.style.ContainerInteger;
 import org.terasology.rendering.nui.widgets.browser.ui.style.FixedContainerInteger;

@@ -17,7 +17,7 @@ package org.terasology.inGameHelp.helpCategories;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
-import org.terasology.asset.Assets;
+import org.terasology.utilities.Assets;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.inGameHelp.ItemsCategoryInGameHelpRegistry;
 import org.terasology.inGameHelp.components.HelpItem;
