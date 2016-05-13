@@ -32,7 +32,7 @@ public class InGameHelpScreen extends CoreScreenLayer {
 
 
     @Override
-    protected void initialise() {
+    public void initialise() {
         InGameHelpCategoryRegistry categoryRegistry = CoreRegistry.get(InGameHelpCategoryRegistry.class);
         categories = categoryRegistry.getCategories();
 
