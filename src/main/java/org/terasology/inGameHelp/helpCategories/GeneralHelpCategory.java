@@ -15,6 +15,7 @@
  */
 package org.terasology.inGameHelp.helpCategories;
 
+import org.terasology.inGameHelp.ItemsCategoryInGameHelpRegistry;
 import org.terasology.utilities.Assets;
 import org.terasology.assets.ResourceUrn;
 import org.terasology.entitySystem.prefab.Prefab;
@@ -32,6 +33,10 @@ public class GeneralHelpCategory implements HelpCategory {
     @Override
     public String getCategoryName() {
         return "General";
+    }
+
+    public void setRegistry(ItemsCategoryInGameHelpRegistry registry) {
+
     }
 
     @Override

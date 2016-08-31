@@ -23,6 +23,8 @@ import org.terasology.rendering.nui.widgets.browser.data.html.HTMLDocument;
 public interface HelpItem {
     String getTitle();
 
+    String getCategory();
+
     Iterable<ParagraphData> getParagraphs();
 
     default void addHelpItemSection(HTMLDocument documentData) {

@@ -15,9 +15,12 @@
  */
 package org.terasology.inGameHelp.systems;
 
+import org.terasology.inGameHelp.ItemsCategoryInGameHelpRegistry;
 import org.terasology.rendering.nui.widgets.browser.data.DocumentData;
 
 public interface HelpCategory {
+    void setRegistry(ItemsCategoryInGameHelpRegistry registry);
+
     String getCategoryName();
 
     DocumentData getDocumentData();

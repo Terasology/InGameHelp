@@ -15,10 +15,13 @@
  */
 package org.terasology.inGameHelp.systems;
 
+import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.inGameHelp.InGameHelpCategoryRegistry;
 import org.terasology.inGameHelp.ItemsCategoryInGameHelpRegistry;
+import org.terasology.inGameHelp.event.OnAddNewCategoryEvent;
 import org.terasology.inGameHelp.helpCategories.GeneralHelpCategory;
 import org.terasology.inGameHelp.helpCategories.ItemsCategory;
 import org.terasology.registry.In;
@@ -33,6 +36,7 @@ public class InGameHelpCommonSystem extends BaseComponentSystem implements InGam
     @In
     ItemsCategoryInGameHelpRegistry itemsCategoryInGameHelpRegistry;
 
+    // List of HelpCategories.
     List<HelpCategory> categories = new ArrayList<>();
 
     @Override
@@ -45,10 +49,24 @@ public class InGameHelpCommonSystem extends BaseComponentSystem implements InGam
         categories.add(category);
     }
 
+    /**
+     * Add a new category to the global list of help categories.
+     *
+     * @param event             The event which contains the new category to be added.
+     * @param entity            Reference to the entity used for passing this event.
+     *
+     */
+    @ReceiveEvent
+    public void addCategory(OnAddNewCategoryEvent event, EntityRef entity) {
+        registerCategory(event.getCategory());
+        event.getCategory().setRegistry(itemsCategoryInGameHelpRegistry);
+    }
+
     @Override
     public void initialise() {
         super.initialise();
 
+        // Register the two base categories.
         registerCategory(new GeneralHelpCategory());
         registerCategory(new ItemsCategory(itemsCategoryInGameHelpRegistry));
     }

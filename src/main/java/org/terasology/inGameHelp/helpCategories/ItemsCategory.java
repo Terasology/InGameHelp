@@ -39,6 +39,7 @@ import org.terasology.rendering.nui.widgets.browser.ui.style.TextRenderStyle;
 import java.util.Map;
 
 public class ItemsCategory implements HelpCategory {
+    private final String name = "Items";
     private final ItemsCategoryInGameHelpRegistry itemsCategoryInGameHelpRegistry;
     Map<String, DocumentData> items = Maps.newHashMap();
     HTMLDocument rootDocument;
@@ -46,6 +47,10 @@ public class ItemsCategory implements HelpCategory {
 
     public ItemsCategory(ItemsCategoryInGameHelpRegistry itemsCategoryInGameHelpRegistry) {
         this.itemsCategoryInGameHelpRegistry = itemsCategoryInGameHelpRegistry;
+    }
+
+    public void setRegistry(ItemsCategoryInGameHelpRegistry registry) {
+
     }
 
     private void initialise() {
@@ -75,40 +80,42 @@ public class ItemsCategory implements HelpCategory {
                 helpComponent.paragraphText.add("An unknown item.");
             }
 
-            FlowParagraphData imageNameParagraph = new FlowParagraphData(null);
-            documentData.addParagraph(imageNameParagraph);
-            imageNameParagraph.append(new WidgetFlowRenderable(new ItemWidget(itemPrefab.getName()), 48, 48, itemPrefab.getName()));
-            DisplayNameComponent displayNameComponent = itemPrefab.getComponent(DisplayNameComponent.class);
-            if (displayNameComponent != null) {
-                imageNameParagraph.append(new TextFlowRenderable(displayNameComponent.name, titleRenderStyle, null));
-            } else {
-                imageNameParagraph.append(new TextFlowRenderable(itemPrefab.getName(), titleRenderStyle, null));
-            }
+            if (getCategoryName().equalsIgnoreCase(helpComponent.getCategory())) {
+                FlowParagraphData imageNameParagraph = new FlowParagraphData(null);
+                documentData.addParagraph(imageNameParagraph);
+                imageNameParagraph.append(new WidgetFlowRenderable(new ItemWidget(itemPrefab.getName()), 48, 48, itemPrefab.getName()));
+                DisplayNameComponent displayNameComponent = itemPrefab.getComponent(DisplayNameComponent.class);
+                if (displayNameComponent != null) {
+                    imageNameParagraph.append(new TextFlowRenderable(displayNameComponent.name, titleRenderStyle, null));
+                } else {
+                    imageNameParagraph.append(new TextFlowRenderable(itemPrefab.getName(), titleRenderStyle, null));
+                }
 
-            helpComponent.addHelpItemSection(documentData);
+                helpComponent.addHelpItemSection(documentData);
 
-            // add all the other ones from components
-            for (HelpItem helpItem : Iterables.filter(itemPrefab.iterateComponents(), HelpItem.class)) {
-                if (helpItem != helpComponent) {
+                // add all the other ones from components
+                for (HelpItem helpItem : Iterables.filter(itemPrefab.iterateComponents(), HelpItem.class)) {
+                    if (helpItem != helpComponent) {
+                        helpItem.addHelpItemSection(documentData);
+                    }
+                }
+
+                // add all the other ones from code registered HelpItems
+                for (HelpItem helpItem : itemsCategoryInGameHelpRegistry.getHelpItems(itemPrefab)) {
                     helpItem.addHelpItemSection(documentData);
                 }
+
+                items.put(itemPrefab.getName(), documentData);
+
+                // add this to the root document
+                itemListParagraph.append(new WidgetFlowRenderable(new ItemWidget(itemPrefab.getName()), 48, 48, itemPrefab.getName()));
             }
-
-            // add all the other ones from code registered HelpItems
-            for (HelpItem helpItem : itemsCategoryInGameHelpRegistry.getHelpItems(itemPrefab)) {
-                helpItem.addHelpItemSection(documentData);
-            }
-
-            items.put(itemPrefab.getName(), documentData);
-
-            // add this to the root document
-            itemListParagraph.append(new WidgetFlowRenderable(new ItemWidget(itemPrefab.getName()), 48, 48, itemPrefab.getName()));
         }
     }
 
     @Override
     public String getCategoryName() {
-        return "Items";
+        return name;
     }
 
     @Override

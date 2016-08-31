@@ -28,11 +28,17 @@ import java.util.List;
  */
 public class GeneralHelpComponent implements Component, HelpItem {
     public String title;
+    public String category = "General";
     public List<String> paragraphText = new ArrayList<>();
 
     @Override
     public String getTitle() {
         return title;
+    }
+
+    @Override
+    public String getCategory() {
+        return category;
     }
 
     @Override
