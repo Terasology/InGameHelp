@@ -32,18 +32,31 @@ import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.rendering.nui.NUIManager;
 
+/**
+ * Class that handles button events and displays the help screen to the client. 
+ */
 @RegisterSystem(RegisterMode.CLIENT)
 @Share(InGameHelpClient.class)
 public class InGameHelpClientSystem extends BaseComponentSystem implements InGameHelpClient {
+    /** Reference to the {@link org.terasology.rendering.nui.NUIManager}, used for adding user interace elements and displaying the help screen. */ 
     @In
     NUIManager nuiManager;
 
+    /**
+     * Initialises the system. Adds an UnHelpedNagWidget to the heads up display.
+     */
     @Override
     public void initialise() {
         super.initialise();
         nuiManager.getHUD().addHUDElement("InGameHelp:UnHelpedNagWidget");
     }
 
+    /**
+     * Handles the button event and displays the InGameHelpScreen when the button has been clicked.
+     *
+     * @param event the help button event.
+     * @param entity the entity to display the help screen to. 
+     */
     @ReceiveEvent(components = ClientComponent.class)
     public void onInGameHelpButton(InGameHelpButton event, EntityRef entity) {
         if (event.getState() == ButtonState.DOWN) {
@@ -58,6 +71,11 @@ public class InGameHelpClientSystem extends BaseComponentSystem implements InGam
         }
     }
 
+    /**
+     * Displays the help screen for the document referenced by hyperlink.
+     *
+     * @param hyperlink the link to the document.
+     */
     @Override
     public void showHelpForHyperlink(String hyperlink) {
         InGameHelpScreen screen = (InGameHelpScreen) nuiManager.getScreen("InGameHelp:InGameHelpScreen");

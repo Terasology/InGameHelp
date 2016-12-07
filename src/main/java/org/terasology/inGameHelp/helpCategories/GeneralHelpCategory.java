@@ -29,7 +29,16 @@ import org.terasology.rendering.nui.widgets.browser.data.html.HTMLDocument;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
+/**
+ * Help category for the general tab.
+ */
 public class GeneralHelpCategory implements HelpCategory {
+
+    /**
+     * Gets the name of this category.
+     *
+     * @return the name of this category.
+     */
     @Override
     public String getCategoryName() {
         return "General";
@@ -39,6 +48,11 @@ public class GeneralHelpCategory implements HelpCategory {
 
     }
 
+    /**
+     * Gets the general help information then adds it to a document data
+     *
+     * @return a document with general help information.
+     */
     @Override
     public DocumentData getDocumentData() {
         HTMLDocument documentData = new HTMLDocument(null);
@@ -59,6 +73,9 @@ public class GeneralHelpCategory implements HelpCategory {
         return documentData;
     }
 
+    /**
+     * @return false
+     */ 
     @Override
     public boolean handleNavigate(String hyperlink) {
         return false;

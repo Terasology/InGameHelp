@@ -24,26 +24,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Use this to add a subsection of help to an item
+ * Use this to add a subsection of help to an item.
  */
 public class ItemHelpComponent implements Component, HelpItem {
     public String title = "About this item";                // Change this to display something else as the title.
     public String category = "Items";                       // What help category to place this item in.
     public List<String> paragraphText = new ArrayList<>();  // The description lines of this item.
 
-    // Return the title of this help item.
+    /**
+     * @return the title of this help item.
+     */
     @Override
     public String getTitle() {
         return title;
     }
 
-    // Return the category of this help item.
+    /**
+     * @return the category of this help item.
+     */
     @Override
     public String getCategory() {
         return category;
     }
 
-    // Return the description of this help item.
+    /**
+     * Gets the description of this help item.
+     *
+     * @return an iterable of paragraph data about this help item that contains the description.
+     */
     @Override
     public Iterable<ParagraphData> getParagraphs() {
         List<ParagraphData> result = Lists.newLinkedList();

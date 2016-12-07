@@ -17,7 +17,22 @@ package org.terasology.inGameHelp;
 
 import org.terasology.inGameHelp.systems.HelpCategory;
 
+/**
+ * Interface for managing the different help categories.
+ */
 public interface InGameHelpCategoryRegistry {
+
+    /**
+     * Retrieves the {@link org.terasology.inGameHelp.systems.HelpCategory}s previously registered to this registry.
+     * 
+     * @return an iterable of the help categories.
+     */
     Iterable<HelpCategory> getCategories();
+
+    /**
+     * Adds a {@link org.terasology.inGameHelp.systems.HelpCategory} to this registry.
+     *
+     * @param category the {@link org.terasology.inGameHelp.systems.HelpCategory} to add.
+     */
     void registerCategory(HelpCategory category);
 }

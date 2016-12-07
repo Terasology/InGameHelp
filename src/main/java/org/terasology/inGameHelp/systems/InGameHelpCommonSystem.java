@@ -30,20 +30,32 @@ import org.terasology.registry.Share;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * System that handles the different categories.
+ */
 @RegisterSystem
 @Share(InGameHelpCategoryRegistry.class)
 public class InGameHelpCommonSystem extends BaseComponentSystem implements InGameHelpCategoryRegistry {
+    /** Reference to the {@link org.terasology.inGameHelp.ItemsCategoryInGameHelpRegistry}. This contains all known items with an InGameHelp component. */
     @In
     ItemsCategoryInGameHelpRegistry itemsCategoryInGameHelpRegistry;
 
-    // List of HelpCategories.
+    /** List of HelpCategories. */
     List<HelpCategory> categories = new ArrayList<>();
 
+    /**
+     * @return a list of help categories.
+     */
     @Override
     public Iterable<HelpCategory> getCategories() {
         return categories;
     }
 
+    /**
+     * Adds a new help category.
+     *
+     * @param category the help category to add.
+     */
     @Override
     public void registerCategory(HelpCategory category) {
         categories.add(category);
@@ -62,6 +74,9 @@ public class InGameHelpCommonSystem extends BaseComponentSystem implements InGam
         event.getCategory().setRegistry(itemsCategoryInGameHelpRegistry);
     }
 
+    /**
+     * Initialises the system and registers a {@link org.terasology.inGameHelp.helpCategories.GeneralHelpCategory} and a {@link org.terasology.inGameHelp.helpCategories.ItemsCategory}.
+     */
     @Override
     public void initialise() {
         super.initialise();

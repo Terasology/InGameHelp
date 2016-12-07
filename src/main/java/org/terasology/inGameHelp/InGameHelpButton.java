@@ -21,6 +21,9 @@ import org.terasology.input.InputType;
 import org.terasology.input.Keyboard;
 import org.terasology.input.RegisterBindButton;
 
+/**
+ * Button event for opening the InGameHelp window.
+ */
 @RegisterBindButton(id = "inGameHelp", description = "Open Help", category = "general")
 @DefaultBinding(type = InputType.KEY, id = Keyboard.KeyId.P)
 public class InGameHelpButton extends BindButtonEvent {
