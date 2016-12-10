@@ -20,13 +20,32 @@ import org.terasology.rendering.nui.widgets.browser.data.ParagraphData;
 import org.terasology.rendering.nui.widgets.browser.data.basic.HTMLLikeParser;
 import org.terasology.rendering.nui.widgets.browser.data.html.HTMLDocument;
 
+/**
+ * Interface that defines the composition of a help item.
+ * This is composed of a title, category, and paragraphs of the description of this help item.
+ */
 public interface HelpItem {
+
+    /**
+     * @return the title of this HelpItem.
+     */
     String getTitle();
 
+    /**
+     * @return the category of this HelpItem.
+     */
     String getCategory();
 
+    /**
+     * @return the description of this HelpItem.
+     */
     Iterable<ParagraphData> getParagraphs();
 
+    /**
+     * Adds help information to the document.
+     *
+     * @param documentdata the document that is modified by adding help information.
+     */
     default void addHelpItemSection(HTMLDocument documentData) {
         documentData.addParagraph(HTMLLikeParser.parseHTMLLikeParagraph(new DefaultTitleParagraphStyle(), getTitle()));
         for (ParagraphData paragraph : getParagraphs()) {

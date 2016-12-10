@@ -18,12 +18,15 @@ package org.terasology.inGameHelp.event;
 import org.terasology.entitySystem.event.Event;
 import org.terasology.inGameHelp.systems.HelpCategory;
 
+/**
+ * Event that is sent to the entity whenever a new HelpCategory is added. Contains the specific help category that was added.
+ */
 public class OnAddNewCategoryEvent implements Event {
-    // Category to be stored in this event.
+    /** Category to be stored in this event.*/
     private HelpCategory category;
 
     /**
-     * Get the category contained this event.
+     * Gets the category contained this event.
      *
      * @return              The category.
      *
@@ -33,7 +36,7 @@ public class OnAddNewCategoryEvent implements Event {
     }
 
     /**
-     * Create a new instance of this event with the given HelpCategory.
+     * Creates a new instance of this event with the given HelpCategory.
      *
      * @param category      The HelpCategory instance.
      *

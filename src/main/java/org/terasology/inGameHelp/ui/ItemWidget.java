@@ -24,19 +24,35 @@ import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.family.BlockFamily;
 import org.terasology.world.block.items.BlockItemFactory;
 import org.terasology.world.block.loader.BlockFamilyDefinition;
-
 import java.util.Optional;
 
+/**
+ * Widget class for items that contains the behavior and what appears on the {@link org.terasology.rendering.nui.Canvas}. Typically used in conjunction with {@link org.terasology.inGameHelp.ui.WidgetFlowRenderable} to be added onto a document. Contains the name of the item's prefab as well as the entity reference to the item.
+ */
 public class ItemWidget extends ItemCell {
+    /** Reference to the item's entity. */
     EntityRef item;
+
+    /** The name of the prefab for the item. */
     String itemUrn;
 
+    /**
+     * Constructor for ItemWidget that takes in an item's prefab name.
+     * 
+     * @param itemUrn the name of the prefab for item.
+     */
     public ItemWidget(String itemUrn) {
         this.itemUrn = itemUrn;
     }
 
+    /**
+     * Gets this widget's {@link org.terasology.entitySystem.entity.EntityRef}. Creates a new entityref if this item is null.
+     *
+     * @return the reference to this widget's Entity.
+     */
     @Override
     public EntityRef getTargetItem() {
+        //creates a new EntityRef from itemUrn if item is null
         if (item == null) {
             EntityManager entityManager = CoreRegistry.get(EntityManager.class);
             BlockManager blockManager = CoreRegistry.get(BlockManager.class);

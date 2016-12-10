@@ -38,13 +38,31 @@ import org.terasology.rendering.nui.widgets.browser.ui.style.TextRenderStyle;
 
 import java.util.Map;
 
+/**
+ * Help category that manages the Items tab.
+ */
 public class ItemsCategory implements HelpCategory {
+    
+    /** Name of this category */
     private final String name = "Items";
+
+    /** Reference to the {@link org.terasology.inGameHelp.ItemsCategoryInGameHelpRegistry} that determines which prefabs are associated with this. */
     private final ItemsCategoryInGameHelpRegistry itemsCategoryInGameHelpRegistry;
+
+    /** Map of prefab names to help documents that are associated with the prefabs. */
     Map<String, DocumentData> items = Maps.newHashMap();
+
+    /** The root HTML document. */
     HTMLDocument rootDocument;
+
+    /** The current document data. */
     DocumentData currentDocument;
 
+    /**
+     * Constructor for this help category.
+     *
+     * @param itemsCategoryInGameHelpRegistry the items category help registry.
+     */
     public ItemsCategory(ItemsCategoryInGameHelpRegistry itemsCategoryInGameHelpRegistry) {
         this.itemsCategoryInGameHelpRegistry = itemsCategoryInGameHelpRegistry;
     }
@@ -53,25 +71,35 @@ public class ItemsCategory implements HelpCategory {
 
     }
 
+    /**
+     * Initialises the help category. Sets the font and padding. Creates the documents then adds help item information to the documents.
+     */
     private void initialise() {
         TextRenderStyle titleRenderStyle = new TextRenderStyle() {
+            /**
+             * @return the title font
+             */
             @Override
             public Font getFont(boolean hyperlink) {
                 return Assets.getFont("engine:title").get();
             }
         };
         ParagraphRenderStyle titleParagraphStyle = new ParagraphRenderStyle() {
+            /**
+             * @return a fixed container integer of size 5
+             */
             @Override
             public ContainerInteger getParagraphPaddingTop() {
                 return new FixedContainerInteger(5);
             }
         };
 
-
+        //Create the root document and add the item list paragraph that contains the items
         rootDocument = new HTMLDocument(null);
         FlowParagraphData itemListParagraph = new FlowParagraphData(null);
         rootDocument.addParagraph(itemListParagraph);
-
+        
+        //add all applicable prefabs to the document
         for (Prefab itemPrefab : itemsCategoryInGameHelpRegistry.getKnownPrefabs()) {
             HTMLDocument documentData = new HTMLDocument(null);
             ItemHelpComponent helpComponent = itemPrefab.getComponent(ItemHelpComponent.class);
@@ -113,11 +141,21 @@ public class ItemsCategory implements HelpCategory {
         }
     }
 
+    /**
+     * Gets the name for this category.
+     *
+     * @return the name of this category.
+     */
     @Override
     public String getCategoryName() {
         return name;
     }
 
+    /**
+     * Gets the document data.
+     *
+     * @return the current document data or the root document if the current document is null.
+     */
     @Override
     public DocumentData getDocumentData() {
         initialise();
@@ -128,11 +166,20 @@ public class ItemsCategory implements HelpCategory {
         }
     }
 
+    /**
+     * Goes to the root document.
+     */
     @Override
     public void resetNavigation() {
         currentDocument = null;
     }
 
+    /**
+     * Goes to the document referenced by hyperlink.
+     *
+     * @param hyperlink the link to the document.
+     * @return true if the link is found. false if otherwise.
+     */
     @Override
     public boolean handleNavigate(String hyperlink) {
         if (items.size() == 0) {
@@ -140,6 +187,7 @@ public class ItemsCategory implements HelpCategory {
             initialise();
         }
 
+        //goes to document referenced by hyperlink if it is found
         if (items.containsKey(hyperlink)) {
             currentDocument = items.get(hyperlink);
             return true;

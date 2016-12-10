@@ -21,12 +21,27 @@ import org.terasology.rendering.nui.widgets.browser.ui.style.ContainerInteger;
 import org.terasology.rendering.nui.widgets.browser.ui.style.FixedContainerInteger;
 import org.terasology.rendering.nui.widgets.browser.ui.style.ParagraphRenderStyle;
 
+/**
+ * The text rendering style for titles.
+ */
 public class DefaultTitleParagraphStyle implements ParagraphRenderStyle {
+
+    /**
+     * Gets the title font
+     *
+     * @param hyperlink this parameter is not used.
+     * @return the title font.
+     */
     @Override
     public Font getFont(boolean hyperlink) {
         return Assets.getFont("engine:title").get();
     }
 
+    /**
+     * Gets the amount of padding on top of the paragraph.
+     *
+     * @return a container integer of value 10.
+     */
     @Override
     public ContainerInteger getParagraphPaddingTop() {
         return new FixedContainerInteger(10);

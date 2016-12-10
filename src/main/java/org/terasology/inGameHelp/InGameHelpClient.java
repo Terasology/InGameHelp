@@ -15,6 +15,15 @@
  */
 package org.terasology.inGameHelp;
 
+/**
+ * Interface for the client of the in game help system.
+ */
 public interface InGameHelpClient {
+
+    /**
+     * Displays the help screen for the document.
+     *
+     * @param hyperlink the link to the document.
+     */
     void showHelpForHyperlink(String hyperlink);
 }

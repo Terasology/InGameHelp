@@ -18,14 +18,38 @@ package org.terasology.inGameHelp.systems;
 import org.terasology.inGameHelp.ItemsCategoryInGameHelpRegistry;
 import org.terasology.rendering.nui.widgets.browser.data.DocumentData;
 
+/**
+ * Interface that manages how a specific help tab will function.
+ */
 public interface HelpCategory {
+
+    /**
+     * Sets the registry.
+     *
+     * @param registry references an items category in the in game help registry.
+     */
     void setRegistry(ItemsCategoryInGameHelpRegistry registry);
 
+    /**
+     *  @return the name of the category.
+     */
     String getCategoryName();
 
+    /**
+     * @return the document data for the particular category.
+     */
     DocumentData getDocumentData();
 
+    /**
+      * Handles navigation between documents.
+      *
+      * @param hyperlink the link to the document.
+      * @return True if the document that was linked exists. False if otherwise.
+      */
     boolean handleNavigate(String hyperlink);
 
+    /**
+     * Resets the document, which takes the user back to the main help page.
+     */
     void resetNavigation();
 }

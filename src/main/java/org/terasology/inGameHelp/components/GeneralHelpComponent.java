@@ -24,23 +24,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Use this to add a subsection of help to the general category
+ * Use this to add a subsection of help to the general category.
  */
 public class GeneralHelpComponent implements Component, HelpItem {
+    /** Title of this component. */
     public String title;
+
+    /** Name of this help category. */ 
     public String category = "General";
+
+    /** Description of this help item. */
     public List<String> paragraphText = new ArrayList<>();
 
+    /**
+     * @return the title of this help item.
+     */
     @Override
     public String getTitle() {
         return title;
     }
 
+    /**
+     * @return the category of this help item.
+     */
     @Override
     public String getCategory() {
         return category;
     }
 
+    /**
+     * Gets the description of this help item.
+     *
+     * @return an iterable of paragraph data that contains the description of this help item.
+     */
     @Override
     public Iterable<ParagraphData> getParagraphs() {
         List<ParagraphData> result = Lists.newLinkedList();
