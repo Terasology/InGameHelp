@@ -3,7 +3,7 @@
     "version" : "1.0.0-SNAPSHOT",
     "author" : "Josharias",
     "displayName" : "In Game Help",
-    "description" : "",
+    "description" : "Adds a in-game help window primarily for items (what it does, what it is, etc.)",
     "dependencies" : [
          {
              "id" : "Core",
