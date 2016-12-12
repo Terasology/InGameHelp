@@ -1,7 +1,7 @@
 {
     "id" : "InGameHelp",
     "version" : "1.0.0-SNAPSHOT",
-    "author" : "Josharias",
+    "author" : "Josharias, J0hnCena, Cervator, xrtariq2594, msteiger",
     "displayName" : "In Game Help",
     "description" : "Adds a in-game help window primarily for items (what it does, what it is, etc.)",
     "dependencies" : [
