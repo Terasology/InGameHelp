@@ -17,12 +17,12 @@ package org.terasology.inGameHelp.helpCategories;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
+import org.terasology.inGameHelpAPI.ItemsCategoryInGameHelpRegistry;
+import org.terasology.inGameHelpAPI.components.HelpItem;
+import org.terasology.inGameHelpAPI.systems.HelpCategory;
 import org.terasology.utilities.Assets;
 import org.terasology.entitySystem.prefab.Prefab;
-import org.terasology.inGameHelp.ItemsCategoryInGameHelpRegistry;
-import org.terasology.inGameHelp.components.HelpItem;
-import org.terasology.inGameHelp.components.ItemHelpComponent;
-import org.terasology.inGameHelp.systems.HelpCategory;
+import org.terasology.inGameHelpAPI.components.ItemHelpComponent;
 import org.terasology.inGameHelp.ui.ItemWidget;
 import org.terasology.inGameHelp.ui.WidgetFlowRenderable;
 import org.terasology.logic.common.DisplayNameComponent;
@@ -46,7 +46,7 @@ public class ItemsCategory implements HelpCategory {
     /** Name of this category */
     private final String name = "Items";
 
-    /** Reference to the {@link org.terasology.inGameHelp.ItemsCategoryInGameHelpRegistry} that determines which prefabs are associated with this. */
+    /** Reference to the {@link org.terasology.inGameHelpAPI.ItemsCategoryInGameHelpRegistry} that determines which prefabs are associated with this. */
     private final ItemsCategoryInGameHelpRegistry itemsCategoryInGameHelpRegistry;
 
     /** Map of prefab names to help documents that are associated with the prefabs. */

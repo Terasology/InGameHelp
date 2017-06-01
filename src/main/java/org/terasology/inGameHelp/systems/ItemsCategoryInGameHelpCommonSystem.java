@@ -18,13 +18,13 @@ package org.terasology.inGameHelp.systems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
+import org.terasology.inGameHelpAPI.ItemsCategoryInGameHelpRegistry;
+import org.terasology.inGameHelpAPI.components.HelpItem;
 import org.terasology.utilities.Assets;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.inGameHelp.ItemsCategoryInGameHelpRegistry;
-import org.terasology.inGameHelp.components.HelpItem;
-import org.terasology.inGameHelp.components.ItemHelpComponent;
+import org.terasology.inGameHelpAPI.components.ItemHelpComponent;
 import org.terasology.registry.Share;
 
 /**
