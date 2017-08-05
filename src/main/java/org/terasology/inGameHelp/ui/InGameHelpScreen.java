@@ -16,7 +16,7 @@
 package org.terasology.inGameHelp.ui;
 
 import org.terasology.inGameHelp.InGameHelpCategoryRegistry;
-import org.terasology.inGameHelp.systems.HelpCategory;
+import org.terasology.inGameHelpAPI.systems.HelpCategory;
 import org.terasology.registry.CoreRegistry;
 import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.rendering.nui.layouts.FlowLayout;

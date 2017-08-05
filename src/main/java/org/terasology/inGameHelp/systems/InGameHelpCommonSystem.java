@@ -20,10 +20,11 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.inGameHelp.InGameHelpCategoryRegistry;
-import org.terasology.inGameHelp.ItemsCategoryInGameHelpRegistry;
-import org.terasology.inGameHelp.event.OnAddNewCategoryEvent;
 import org.terasology.inGameHelp.helpCategories.GeneralHelpCategory;
 import org.terasology.inGameHelp.helpCategories.ItemsCategory;
+import org.terasology.inGameHelpAPI.ItemsCategoryInGameHelpRegistry;
+import org.terasology.inGameHelpAPI.event.OnAddNewCategoryEvent;
+import org.terasology.inGameHelpAPI.systems.HelpCategory;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 
@@ -36,7 +37,7 @@ import java.util.List;
 @RegisterSystem
 @Share(InGameHelpCategoryRegistry.class)
 public class InGameHelpCommonSystem extends BaseComponentSystem implements InGameHelpCategoryRegistry {
-    /** Reference to the {@link org.terasology.inGameHelp.ItemsCategoryInGameHelpRegistry}. This contains all known items with an InGameHelp component. */
+    /** Reference to the {@link org.terasology.inGameHelpAPI.ItemsCategoryInGameHelpRegistry}. This contains all known items with an InGameHelp component. */
     @In
     ItemsCategoryInGameHelpRegistry itemsCategoryInGameHelpRegistry;
 
