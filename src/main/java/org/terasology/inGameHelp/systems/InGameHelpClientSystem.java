@@ -23,7 +23,7 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.inGameHelp.InGameHelpClient;
 import org.terasology.inGameHelp.components.HasBeenHelpedComponent;
 import org.terasology.inGameHelp.ui.InGameHelpScreen;
-import org.terasology.inGameHelpAPI.InGameHelpButton;
+import org.terasology.inGameHelp.ui.InGameHelpButton;
 import org.terasology.input.ButtonState;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.network.ClientComponent;

@@ -23,16 +23,16 @@ import org.terasology.inGameHelpAPI.systems.HelpCategory;
 public interface InGameHelpCategoryRegistry {
 
     /**
-     * Retrieves the {@link org.terasology.inGameHelp.systems.HelpCategory}s previously registered to this registry.
+     * Retrieves the {@link org.terasology.inGameHelpAPI.systems.HelpCategory}s previously registered to this registry.
      * 
      * @return an iterable of the help categories.
      */
     Iterable<HelpCategory> getCategories();
 
     /**
-     * Adds a {@link org.terasology.inGameHelp.systems.HelpCategory} to this registry.
+     * Adds a {@link org.terasology.inGameHelpAPI.systems.HelpCategory} to this registry.
      *
-     * @param category the {@link org.terasology.inGameHelp.systems.HelpCategory} to add.
+     * @param category the {@link org.terasology.inGameHelpAPI.systems.HelpCategory} to add.
      */
     void registerCategory(HelpCategory category);
 }

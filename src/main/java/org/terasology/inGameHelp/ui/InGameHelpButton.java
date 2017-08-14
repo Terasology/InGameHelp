@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 MovingBlocks
+ * Copyright 2017 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.inGameHelp;
+package org.terasology.inGameHelp.ui;
+
+import org.terasology.input.BindButtonEvent;
+import org.terasology.input.DefaultBinding;
+import org.terasology.input.InputType;
+import org.terasology.input.Keyboard;
+import org.terasology.input.RegisterBindButton;
 
 /**
- * Interface for the client of the in game help system.
+ * Button event for opening the InGameHelp window.
  */
-public interface InGameHelpClient {
-    /**
-     * Displays the help screen for the document.
-     *
-     * @param hyperlink the link to the document.
-     */
-    void showHelpForHyperlink(String hyperlink);
+@RegisterBindButton(id = "inGameHelp", description = "Open Help", category = "general")
+@DefaultBinding(type = InputType.KEY, id = Keyboard.KeyId.P)
+public class InGameHelpButton extends BindButtonEvent {
 }
