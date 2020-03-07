@@ -5,7 +5,7 @@
     "displayName" : "In Game Help",
     "description" : "Adds a in-game help window primarily for items (what it does, what it is, etc.)",
     "dependencies" : [
-        {"id" : "Core", "minVersion" : "2.0.0"},
+        {"id" : "Core", "minVersion" : "3.0.0"},
         {"id" : "InGameHelpAPI", "minVersion" : "0.1.0"}
     ],
     "serverSideOnly" : false
