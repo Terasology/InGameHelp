@@ -15,16 +15,16 @@
  */
 package org.terasology.inGameHelp.helpCategories;
 
+import org.terasology.entitySystem.prefab.Prefab;
+import org.terasology.gestalt.assets.ResourceUrn;
+import org.terasology.inGameHelp.components.GeneralHelpComponent;
 import org.terasology.inGameHelpAPI.ItemsCategoryInGameHelpRegistry;
 import org.terasology.inGameHelpAPI.systems.HelpCategory;
 import org.terasology.inGameHelpAPI.ui.DefaultTitleParagraphStyle;
-import org.terasology.utilities.Assets;
-import org.terasology.assets.ResourceUrn;
-import org.terasology.entitySystem.prefab.Prefab;
-import org.terasology.inGameHelp.components.GeneralHelpComponent;
 import org.terasology.rendering.nui.widgets.browser.data.DocumentData;
 import org.terasology.rendering.nui.widgets.browser.data.basic.HTMLLikeParser;
 import org.terasology.rendering.nui.widgets.browser.data.html.HTMLDocument;
+import org.terasology.utilities.Assets;
 
 import java.util.Comparator;
 import java.util.stream.Collectors;
