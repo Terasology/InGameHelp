@@ -2,31 +2,38 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.inGameHelp.ui;
 
+import org.terasology.engine.registry.CoreRegistry;
+import org.terasology.engine.rendering.nui.CoreScreenLayer;
+import org.terasology.engine.rendering.nui.widgets.browser.ui.BrowserHyperlinkListener;
+import org.terasology.engine.rendering.nui.widgets.browser.ui.BrowserWidget;
 import org.terasology.inGameHelp.InGameHelpCategoryRegistry;
 import org.terasology.inGameHelpAPI.systems.HelpCategory;
-import org.terasology.registry.CoreRegistry;
-import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.nui.layouts.FlowLayout;
 import org.terasology.nui.widgets.UIButton;
-import org.terasology.rendering.nui.widgets.browser.ui.BrowserHyperlinkListener;
-import org.terasology.rendering.nui.widgets.browser.ui.BrowserWidget;
 
 /**
  * Implementation for the help screen.
  */
 public class InGameHelpScreen extends CoreScreenLayer {
-    /** Layout that contains buttons for the help category tabs. */
+    /**
+     * Layout that contains buttons for the help category tabs.
+     */
     FlowLayout categoryButtons;
 
-    /** Browser that contains a listener for navigating to the different help categories. */
+    /**
+     * Browser that contains a listener for navigating to the different help categories.
+     */
     BrowserWidget browser;
-    
-    /** Iterable that contains all the help categories. */
+
+    /**
+     * Iterable that contains all the help categories.
+     */
     Iterable<HelpCategory> categories;
 
 
     /**
-     * Initialises the screen with buttons containing the names of the help categories that navigate to documents containing information for each of the help categories. 
+     * Initialises the screen with buttons containing the names of the help categories that navigate to documents
+     * containing information for each of the help categories.
      */
     @Override
     public void initialise() {

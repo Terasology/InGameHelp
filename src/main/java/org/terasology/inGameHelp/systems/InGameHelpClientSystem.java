@@ -1,44 +1,34 @@
-/*
- * Copyright 2015 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.inGameHelp.systems;
 
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterMode;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterMode;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.players.LocalPlayer;
+import org.terasology.engine.network.ClientComponent;
+import org.terasology.engine.registry.CoreRegistry;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.registry.Share;
+import org.terasology.engine.rendering.nui.NUIManager;
 import org.terasology.inGameHelp.InGameHelpClient;
 import org.terasology.inGameHelp.components.HasBeenHelpedComponent;
-import org.terasology.inGameHelp.ui.InGameHelpScreen;
 import org.terasology.inGameHelp.ui.InGameHelpButton;
-import org.terasology.input.ButtonState;
-import org.terasology.logic.players.LocalPlayer;
-import org.terasology.network.ClientComponent;
-import org.terasology.registry.CoreRegistry;
-import org.terasology.registry.In;
-import org.terasology.registry.Share;
-import org.terasology.rendering.nui.NUIManager;
+import org.terasology.inGameHelp.ui.InGameHelpScreen;
+import org.terasology.nui.input.ButtonState;
 
 /**
- * Class that handles button events and displays the help screen to the client. 
+ * Class that handles button events and displays the help screen to the client.
  */
 @RegisterSystem(RegisterMode.CLIENT)
 @Share(InGameHelpClient.class)
 public class InGameHelpClientSystem extends BaseComponentSystem implements InGameHelpClient {
-    /** Reference to the {@link org.terasology.rendering.nui.NUIManager}, used for adding user interace elements and displaying the help screen. */ 
+    /**
+     * Reference to the {@link org.terasology.rendering.nui.NUIManager}, used for adding user interace elements and
+     * displaying the help screen.
+     */
     @In
     NUIManager nuiManager;
 
@@ -55,7 +45,7 @@ public class InGameHelpClientSystem extends BaseComponentSystem implements InGam
      * Handles the button event and displays the InGameHelpScreen when the button has been clicked.
      *
      * @param event the help button event.
-     * @param entity the entity to display the help screen to. 
+     * @param entity the entity to display the help screen to.
      */
     @ReceiveEvent(components = ClientComponent.class)
     public void onInGameHelpButton(InGameHelpButton event, EntityRef entity) {

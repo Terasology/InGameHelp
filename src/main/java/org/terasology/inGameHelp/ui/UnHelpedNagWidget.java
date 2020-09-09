@@ -3,12 +3,12 @@
 package org.terasology.inGameHelp.ui;
 
 import com.google.common.base.Strings;
-import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.logic.players.LocalPlayer;
+import org.terasology.engine.registry.CoreRegistry;
+import org.terasology.engine.rendering.nui.layers.hud.CoreHudWidget;
 import org.terasology.inGameHelp.components.HasBeenHelpedComponent;
-import org.terasology.logic.players.LocalPlayer;
-import org.terasology.registry.CoreRegistry;
 import org.terasology.nui.databinding.ReadOnlyBinding;
-import org.terasology.rendering.nui.layers.hud.CoreHudWidget;
 import org.terasology.nui.widgets.UILabel;
 
 /**
@@ -16,11 +16,13 @@ import org.terasology.nui.widgets.UILabel;
  */
 public class UnHelpedNagWidget extends CoreHudWidget {
 
-    /** Label that contains the message to display. */
+    /**
+     * Label that contains the message to display.
+     */
     UILabel message;
 
     /**
-     * Initialises the widget by setting message. Only displays if the message has text. 
+     * Initialises the widget by setting message. Only displays if the message has text.
      */
     @Override
     public void initialise() {
@@ -33,7 +35,8 @@ public class UnHelpedNagWidget extends CoreHudWidget {
                 @Override
                 public String get() {
                     EntityRef targetEntity = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
-                    HasBeenHelpedComponent hasBeenHelpedComponent = targetEntity.getComponent(HasBeenHelpedComponent.class);
+                    HasBeenHelpedComponent hasBeenHelpedComponent =
+                            targetEntity.getComponent(HasBeenHelpedComponent.class);
                     //determine if player has been helped
                     if (hasBeenHelpedComponent == null) {
                         return "Press 'P' for in game help";

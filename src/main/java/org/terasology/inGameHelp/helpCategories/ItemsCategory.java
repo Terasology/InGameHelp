@@ -1,40 +1,27 @@
-/*
- * Copyright 2015 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.inGameHelp.helpCategories;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
+import org.terasology.engine.entitySystem.prefab.Prefab;
+import org.terasology.engine.logic.common.DisplayNameComponent;
+import org.terasology.engine.rendering.assets.font.Font;
+import org.terasology.engine.rendering.nui.widgets.browser.data.DocumentData;
+import org.terasology.engine.rendering.nui.widgets.browser.data.basic.FlowParagraphData;
+import org.terasology.engine.rendering.nui.widgets.browser.data.basic.flow.TextFlowRenderable;
+import org.terasology.engine.rendering.nui.widgets.browser.data.html.HTMLDocument;
+import org.terasology.engine.rendering.nui.widgets.browser.ui.style.ContainerInteger;
+import org.terasology.engine.rendering.nui.widgets.browser.ui.style.FixedContainerInteger;
+import org.terasology.engine.rendering.nui.widgets.browser.ui.style.ParagraphRenderStyle;
+import org.terasology.engine.rendering.nui.widgets.browser.ui.style.TextRenderStyle;
+import org.terasology.engine.utilities.Assets;
 import org.terasology.inGameHelpAPI.ItemsCategoryInGameHelpRegistry;
 import org.terasology.inGameHelpAPI.components.HelpItem;
-import org.terasology.inGameHelpAPI.systems.HelpCategory;
-import org.terasology.utilities.Assets;
-import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.inGameHelpAPI.components.ItemHelpComponent;
+import org.terasology.inGameHelpAPI.systems.HelpCategory;
 import org.terasology.inGameHelpAPI.ui.ItemWidget;
 import org.terasology.inGameHelpAPI.ui.WidgetFlowRenderable;
-import org.terasology.logic.common.DisplayNameComponent;
-import org.terasology.rendering.assets.font.Font;
-import org.terasology.rendering.nui.widgets.browser.data.DocumentData;
-import org.terasology.rendering.nui.widgets.browser.data.basic.FlowParagraphData;
-import org.terasology.rendering.nui.widgets.browser.data.basic.flow.TextFlowRenderable;
-import org.terasology.rendering.nui.widgets.browser.data.html.HTMLDocument;
-import org.terasology.rendering.nui.widgets.browser.ui.style.ContainerInteger;
-import org.terasology.rendering.nui.widgets.browser.ui.style.FixedContainerInteger;
-import org.terasology.rendering.nui.widgets.browser.ui.style.ParagraphRenderStyle;
-import org.terasology.rendering.nui.widgets.browser.ui.style.TextRenderStyle;
 
 import java.util.Map;
 
@@ -42,20 +29,31 @@ import java.util.Map;
  * Help category that manages the Items tab.
  */
 public class ItemsCategory implements HelpCategory {
-    
-    /** Name of this category */
+
+    /**
+     * Name of this category
+     */
     private final String name = "Items";
 
-    /** Reference to the {@link org.terasology.inGameHelpAPI.ItemsCategoryInGameHelpRegistry} that determines which prefabs are associated with this. */
+    /**
+     * Reference to the {@link org.terasology.inGameHelpAPI.ItemsCategoryInGameHelpRegistry} that determines which
+     * prefabs are associated with this.
+     */
     private final ItemsCategoryInGameHelpRegistry itemsCategoryInGameHelpRegistry;
 
-    /** Map of prefab names to help documents that are associated with the prefabs. */
+    /**
+     * Map of prefab names to help documents that are associated with the prefabs.
+     */
     Map<String, DocumentData> items = Maps.newHashMap();
 
-    /** The root HTML document. */
+    /**
+     * The root HTML document.
+     */
     HTMLDocument rootDocument;
 
-    /** The current document data. */
+    /**
+     * The current document data.
+     */
     DocumentData currentDocument;
 
     /**
@@ -72,7 +70,8 @@ public class ItemsCategory implements HelpCategory {
     }
 
     /**
-     * Initialises the help category. Sets the font and padding. Creates the documents then adds help item information to the documents.
+     * Initialises the help category. Sets the font and padding. Creates the documents then adds help item information
+     * to the documents.
      */
     private void initialise() {
         TextRenderStyle titleRenderStyle = new TextRenderStyle() {
@@ -98,7 +97,7 @@ public class ItemsCategory implements HelpCategory {
         rootDocument = new HTMLDocument(null);
         FlowParagraphData itemListParagraph = new FlowParagraphData(null);
         rootDocument.addParagraph(itemListParagraph);
-        
+
         //add all applicable prefabs to the document
         for (Prefab itemPrefab : itemsCategoryInGameHelpRegistry.getKnownPrefabs()) {
             HTMLDocument documentData = new HTMLDocument(null);
@@ -111,10 +110,12 @@ public class ItemsCategory implements HelpCategory {
             if (getCategoryName().equalsIgnoreCase(helpComponent.getCategory())) {
                 FlowParagraphData imageNameParagraph = new FlowParagraphData(null);
                 documentData.addParagraph(imageNameParagraph);
-                imageNameParagraph.append(new WidgetFlowRenderable(new ItemWidget(itemPrefab.getName()), 48, 48, itemPrefab.getName()));
+                imageNameParagraph.append(new WidgetFlowRenderable(new ItemWidget(itemPrefab.getName()), 48, 48,
+                        itemPrefab.getName()));
                 DisplayNameComponent displayNameComponent = itemPrefab.getComponent(DisplayNameComponent.class);
                 if (displayNameComponent != null) {
-                    imageNameParagraph.append(new TextFlowRenderable(displayNameComponent.name, titleRenderStyle, null));
+                    imageNameParagraph.append(new TextFlowRenderable(displayNameComponent.name, titleRenderStyle,
+                            null));
                 } else {
                     imageNameParagraph.append(new TextFlowRenderable(itemPrefab.getName(), titleRenderStyle, null));
                 }
@@ -136,7 +137,8 @@ public class ItemsCategory implements HelpCategory {
                 items.put(itemPrefab.getName(), documentData);
 
                 // add this to the root document
-                itemListParagraph.append(new WidgetFlowRenderable(new ItemWidget(itemPrefab.getName()), 48, 48, itemPrefab.getName()));
+                itemListParagraph.append(new WidgetFlowRenderable(new ItemWidget(itemPrefab.getName()), 48, 48,
+                        itemPrefab.getName()));
             }
         }
     }
@@ -183,7 +185,8 @@ public class ItemsCategory implements HelpCategory {
     @Override
     public boolean handleNavigate(String hyperlink) {
         if (items.size() == 0) {
-            // handle the case where we navigate before we have shown the screen.  There is probably a better way to do this.
+            // handle the case where we navigate before we have shown the screen.  There is probably a better way to 
+            // do this.
             initialise();
         }
 
