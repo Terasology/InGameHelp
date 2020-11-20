@@ -6,7 +6,8 @@
     "description": "Adds a in-game help window primarily for items (what it does, what it is, etc.)",
     "dependencies": [
         { "id": "InGameHelpAPI", "minVersion": "1.0.0" },
-        { "id": "Inventory", "minVersion": "1.1.0" }
+        { "id": "Inventory", "minVersion": "1.1.0" },
+        { "id": "Notifications", "minVersion": "0.1.0-SNAPSHOT" }
     ],
     "serverSideOnly": false,
     "isAugmentation": true

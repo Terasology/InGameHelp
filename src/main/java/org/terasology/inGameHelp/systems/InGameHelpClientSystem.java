@@ -1,20 +1,8 @@
-/*
- * Copyright 2015 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.inGameHelp.systems;
 
+import org.terasology.engine.SimpleUri;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
@@ -22,25 +10,43 @@ import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.inGameHelp.InGameHelpClient;
 import org.terasology.inGameHelp.components.HasBeenHelpedComponent;
-import org.terasology.inGameHelp.ui.InGameHelpScreen;
 import org.terasology.inGameHelp.ui.InGameHelpButton;
+import org.terasology.inGameHelp.ui.InGameHelpScreen;
 import org.terasology.input.ButtonState;
+import org.terasology.input.Input;
+import org.terasology.input.InputSystem;
 import org.terasology.logic.players.LocalPlayer;
+import org.terasology.logic.players.event.LocalPlayerInitializedEvent;
 import org.terasology.network.ClientComponent;
-import org.terasology.registry.CoreRegistry;
+import org.terasology.notifications.AddNotificationEvent;
+import org.terasology.notifications.Notification;
+import org.terasology.notifications.RemoveNotificationEvent;
+import org.terasology.nui.Color;
+import org.terasology.nui.FontColor;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.rendering.nui.NUIManager;
+import org.terasology.unicode.EnclosedAlphanumerics;
 
 /**
- * Class that handles button events and displays the help screen to the client. 
+ * Class that handles button events and displays the help screen to the client.
  */
 @RegisterSystem(RegisterMode.CLIENT)
 @Share(InGameHelpClient.class)
 public class InGameHelpClientSystem extends BaseComponentSystem implements InGameHelpClient {
-    /** Reference to the {@link org.terasology.rendering.nui.NUIManager}, used for adding user interace elements and displaying the help screen. */ 
+
+    private static final String NOTIFICATION_ID = "InGameHelp:firstTime";
+
+    /**
+     * Reference to the {@link org.terasology.rendering.nui.NUIManager}, used for adding user interace elements and
+     * displaying the help screen.
+     */
     @In
     NUIManager nuiManager;
+    @In
+    InputSystem inputSystem;
+    @In
+    LocalPlayer localPlayer;
 
     /**
      * Initialises the system. Adds an UnHelpedNagWidget to the heads up display.
@@ -52,16 +58,58 @@ public class InGameHelpClientSystem extends BaseComponentSystem implements InGam
     }
 
     /**
+     * Get a formatted representation of the primary {@link Input} associated with the given button binding.
+     *
+     * If the display name of the primary bound key is a single character this representation will be the encircled
+     * character. Otherwise the full display name is used. The bound key will be printed in yellow.
+     *
+     * If now key binding was found the text "n/a" in red color is returned.
+     *
+     * @param button the Uri of a bindable button
+     * @return a formatted text to be used as representation for the player
+     */
+    //TODO: put this in a common place? Duplicated in Dialogs and EventualSkills
+    private String getActivationKey(SimpleUri button) {
+        return inputSystem.getInputsForBindButton(button).stream()
+                .findFirst()
+                .map(Input::getDisplayName)
+                .map(key -> {
+                    if (key.length() == 1) {
+                        // print the key in yellow within a circle
+                        int off = key.charAt(0) - 'A';
+                        char code = (char) (EnclosedAlphanumerics.CIRCLED_LATIN_CAPITAL_LETTER_A + off);
+                        return String.valueOf(code);
+                    } else {
+                        return key;
+                    }
+                })
+                .map(key -> FontColor.getColored(key, new Color(0xFFFF00FF)))
+                .orElse(FontColor.getColored("n/a", Color.red));
+    }
+
+    @ReceiveEvent
+    public void onLocalPlayerInitialized(LocalPlayerInitializedEvent event, EntityRef entity) {
+        if (!localPlayer.getCharacterEntity().hasComponent(HasBeenHelpedComponent.class)) {
+            Notification notification = new Notification(NOTIFICATION_ID,
+                    "Where's the Manual?",
+                    "Press " + getActivationKey(new SimpleUri("InGameHelp:inGameHelp")) + " for in-game help",
+                    "CoreAssets:icons#bubble");
+            localPlayer.getClientEntity().send(new AddNotificationEvent(notification));
+        }
+    }
+
+    /**
      * Handles the button event and displays the InGameHelpScreen when the button has been clicked.
      *
      * @param event the help button event.
-     * @param entity the entity to display the help screen to. 
+     * @param entity the entity to display the help screen to.
      */
     @ReceiveEvent(components = ClientComponent.class)
     public void onInGameHelpButton(InGameHelpButton event, EntityRef entity) {
         if (event.getState() == ButtonState.DOWN) {
+            entity.send(new RemoveNotificationEvent(NOTIFICATION_ID));
 
-            EntityRef targetEntity = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
+            EntityRef targetEntity = localPlayer.getCharacterEntity();
             if (!targetEntity.hasComponent(HasBeenHelpedComponent.class)) {
                 targetEntity.addComponent(new HasBeenHelpedComponent());
             }
