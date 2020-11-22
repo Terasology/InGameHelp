@@ -18,9 +18,9 @@ import org.terasology.input.InputSystem;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.logic.players.event.LocalPlayerInitializedEvent;
 import org.terasology.network.ClientComponent;
-import org.terasology.notifications.events.AddNotificationEvent;
+import org.terasology.notifications.events.ShowNotificationEvent;
 import org.terasology.notifications.model.Notification;
-import org.terasology.notifications.events.RemoveNotificationEvent;
+import org.terasology.notifications.events.ExpireNotificationEvent;
 import org.terasology.nui.Color;
 import org.terasology.nui.FontColor;
 import org.terasology.registry.In;
@@ -94,7 +94,7 @@ public class InGameHelpClientSystem extends BaseComponentSystem implements InGam
                     "Where's the Manual?",
                     "Press " + getActivationKey(new SimpleUri("InGameHelp:inGameHelp")) + " for in-game help",
                     "CoreAssets:icons#bubble");
-            localPlayer.getClientEntity().send(new AddNotificationEvent(notification));
+            localPlayer.getClientEntity().send(new ShowNotificationEvent(notification));
         }
     }
 
@@ -107,7 +107,7 @@ public class InGameHelpClientSystem extends BaseComponentSystem implements InGam
     @ReceiveEvent(components = ClientComponent.class)
     public void onInGameHelpButton(InGameHelpButton event, EntityRef entity) {
         if (event.getState() == ButtonState.DOWN) {
-            entity.send(new RemoveNotificationEvent(NOTIFICATION_ID));
+            entity.send(new ExpireNotificationEvent(NOTIFICATION_ID));
 
             EntityRef targetEntity = localPlayer.getCharacterEntity();
             if (!targetEntity.hasComponent(HasBeenHelpedComponent.class)) {
