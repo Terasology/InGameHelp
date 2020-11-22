@@ -8,7 +8,7 @@
         { "id": "CoreAssets", "minVersion": "2.0.0" },
         { "id": "InGameHelpAPI", "minVersion": "1.0.0" },
         { "id": "Inventory", "minVersion": "1.1.0" },
-        { "id": "Notifications", "minVersion": "0.1.0-SNAPSHOT" }
+        { "id": "Notifications", "minVersion": "0.1.0" }
     ],
     "serverSideOnly": false,
     "isAugmentation": true
