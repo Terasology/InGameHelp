@@ -16,17 +16,18 @@ import org.terasology.rendering.assets.font.Font;
 import org.terasology.rendering.nui.widgets.browser.data.DocumentData;
 import org.terasology.rendering.nui.widgets.browser.data.ParagraphData;
 import org.terasology.rendering.nui.widgets.browser.data.basic.FlowParagraphData;
+import org.terasology.rendering.nui.widgets.browser.data.basic.flow.FlowRenderable;
 import org.terasology.rendering.nui.widgets.browser.data.basic.flow.TextFlowRenderable;
 import org.terasology.rendering.nui.widgets.browser.data.html.HTMLDocument;
 import org.terasology.rendering.nui.widgets.browser.ui.style.TextRenderStyle;
 import org.terasology.utilities.Assets;
 
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * Help category that manages the Items tab.
@@ -47,7 +48,7 @@ public class ItemsCategory implements HelpCategory {
     /**
      * Sorted list of item help entries with hyperlink and document data attached.
      */
-    private final List<ItemHelpEntry> items = Lists.newArrayList();
+    private List<ItemHelpEntry> items = Lists.newArrayList();
 
     /**
      * The root HTML document.
@@ -76,6 +77,7 @@ public class ItemsCategory implements HelpCategory {
      * to the documents.
      */
     private void initialise() {
+        // initialize the rendering style
         TextRenderStyle titleRenderStyle = new TextRenderStyle() {
             /**
              * @return the title font
@@ -86,59 +88,95 @@ public class ItemsCategory implements HelpCategory {
             }
         };
 
+        // initialize item help entries for all applicable prefabs
+        items = StreamSupport.stream(itemsCategoryInGameHelpRegistry.getKnownPrefabs().spliterator(), false)
+                .map(itemPrefab -> helpEntryFor(itemPrefab, titleRenderStyle))
+                .filter(Objects::nonNull)
+                .sorted(Comparator.comparing(ItemHelpEntry::getDisplayName))
+                .collect(Collectors.toList());
+
+        // add all item help entries sorted in alphabetical order to the document
+        FlowParagraphData itemListParagraph = new FlowParagraphData(null);
+        items.stream()
+                .map(ItemHelpEntry::getHyperlink)
+                .map(this::createItemWidget)
+                .forEach(itemListParagraph::append);
+
         //Create the root document and add the item list paragraph that contains the items
         rootDocument = new HTMLDocument(null);
-        FlowParagraphData itemListParagraph = new FlowParagraphData(null);
         rootDocument.addParagraph(itemListParagraph);
-
-        final Map<String, String> displayNames = new HashMap<>();
-
-        //add all applicable prefabs to the document
-        for (Prefab itemPrefab : itemsCategoryInGameHelpRegistry.getKnownPrefabs()) {
-
-            ItemHelpComponent helpComponent = itemPrefab.getComponent(ItemHelpComponent.class);
-            if (helpComponent == null) {
-                helpComponent = new ItemHelpComponent();
-                helpComponent.paragraphText.add("An unknown item.");
-            }
-
-            if (getCategoryName().equalsIgnoreCase(helpComponent.getCategory())) {
-
-                String displayName =
-                        Optional.ofNullable(itemPrefab.getComponent(DisplayNameComponent.class))
-                                .map(c -> c.name)
-                                .orElse(itemPrefab.getName());
-                displayNames.put(displayName, itemPrefab.getName());
-
-                HTMLDocument documentData = new HTMLDocument(null);
-
-                documentData.addParagraph(getImageNameParagraph(itemPrefab.getName(), displayName, titleRenderStyle));
-
-                List<HelpItem> helpItems = Lists.newArrayList(helpComponent);
-                Iterables.filter(itemPrefab.iterateComponents(), HelpItem.class).forEach(helpItems::add);
-                itemsCategoryInGameHelpRegistry.getHelpItems(itemPrefab).forEach(helpItems::add);
-
-                List<ParagraphData> allParagraphs = helpItems.stream()
-                        .sorted(Comparator.comparing(HelpItem::getTitle))
-                        .distinct()
-                        .map(HelpItem::getHelpSection)
-                        .flatMap(List::stream)
-                        .collect(Collectors.toList());
-
-                documentData.addParagraphs(allParagraphs);
-
-                items.add(new ItemHelpEntry(itemPrefab.getName(), displayName, documentData));
-            }
-        }
-        items.stream()
-                .sorted(Comparator.comparing(ItemHelpEntry::getDisplayName))
-                .map(ItemHelpEntry::getHyperlink)
-                .forEach(hyperlink ->
-                        itemListParagraph.append(
-                                new WidgetFlowRenderable(new ItemWidget(hyperlink), 48, 48, hyperlink)));
     }
 
-    private ParagraphData getImageNameParagraph(String prefabName, String displayName, TextRenderStyle renderStyle) {
+    /**
+     * Create a renderable widget for an item identified by the given URN.
+     *
+     * @param simpleUri the resource URN of the item, in form of a simple URI
+     * @return a square widget of the item's icon or preview
+     */
+    private FlowRenderable createItemWidget(String simpleUri) {
+        return new WidgetFlowRenderable(new ItemWidget(simpleUri), 48, 48, simpleUri);
+    }
+
+    /**
+     * Create a help entry for the given prefab.
+     * <p>
+     * The help entry contains the detailed help rendered as {@link HTMLDocument} as well as the hyperlink for
+     * identification and the display name (for sorting in the UI).
+     * <p>
+     * The detailed help document consists of a title paragraph with the item's image and display name, followed by
+     * paragraphs derived from associated {@link HelpItem}s. These subsections are sorted alphabetically by their
+     * title.
+     *
+     * @param itemPrefab the item prefab to create a help entry for
+     * @param titleRenderStyle the render style to use for paragraph titles
+     * @return an {@link ItemHelpEntry} for the prefab, or {@code null} if it does not match this category
+     */
+    private ItemHelpEntry helpEntryFor(Prefab itemPrefab, TextRenderStyle titleRenderStyle) {
+        ItemHelpComponent helpComponent = itemPrefab.getComponent(ItemHelpComponent.class);
+        if (helpComponent == null) {
+            helpComponent = new ItemHelpComponent();
+            helpComponent.paragraphText.add("An unknown item.");
+        }
+
+        if (getCategoryName().equalsIgnoreCase(helpComponent.getCategory())) {
+
+            String displayName =
+                    Optional.ofNullable(itemPrefab.getComponent(DisplayNameComponent.class))
+                            .map(c -> c.name)
+                            .orElse(itemPrefab.getName());
+
+            // add the ItemHelpComponent from the prefab (or the freshly created one if not present)
+            List<HelpItem> helpItems = Lists.newArrayList(helpComponent);
+            // add all HelpItem components from the prefab
+            Iterables.filter(itemPrefab.iterateComponents(), HelpItem.class).forEach(helpItems::add);
+            // add all HelpItems that have been registered
+            itemsCategoryInGameHelpRegistry.getHelpItems(itemPrefab).forEach(helpItems::add);
+
+            List<ParagraphData> allParagraphs = helpItems.stream()
+                    .distinct()
+                    .sorted(Comparator.comparing(HelpItem::getTitle))
+                    .map(HelpItem::getHelpSection)
+                    .flatMap(List::stream)
+                    .collect(Collectors.toList());
+
+            HTMLDocument documentData = new HTMLDocument(null);
+            documentData.addParagraph(getTitleParagraph(itemPrefab.getName(), displayName, titleRenderStyle));
+            documentData.addParagraphs(allParagraphs);
+
+            return new ItemHelpEntry(itemPrefab.getName(), displayName, documentData);
+        }
+        return null;
+    }
+
+    /**
+     * Assemble the title paragraph for an item based on the given prefab name.
+     *
+     * @param prefabName the prefab name, i.e., resource urn for the item
+     * @param displayName the human readable name to display
+     * @param renderStyle the render style for the title text
+     * @return a paragraph with the item's icon on the left followed by the display name
+     */
+    private ParagraphData getTitleParagraph(String prefabName, String displayName, TextRenderStyle renderStyle) {
         FlowParagraphData paragraph = new FlowParagraphData(null);
         paragraph.append(new WidgetFlowRenderable(new ItemWidget(prefabName), 48, 48, prefabName));
         paragraph.append(new TextFlowRenderable(displayName, renderStyle, null));
