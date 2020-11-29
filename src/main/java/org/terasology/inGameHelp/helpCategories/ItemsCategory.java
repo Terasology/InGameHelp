@@ -6,6 +6,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.inGameHelpAPI.ItemsCategoryInGameHelpRegistry;
+import org.terasology.inGameHelpAPI.components.HelpItem;
 import org.terasology.inGameHelpAPI.components.ItemHelpComponent;
 import org.terasology.inGameHelpAPI.systems.HelpCategory;
 import org.terasology.inGameHelpAPI.ui.ItemWidget;
@@ -25,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Help category that manages the Items tab.
@@ -111,22 +113,19 @@ public class ItemsCategory implements HelpCategory {
                 HTMLDocument documentData = new HTMLDocument(null);
 
                 documentData.addParagraph(getImageNameParagraph(itemPrefab.getName(), displayName, titleRenderStyle));
-                documentData.addParagraphs(helpComponent.getHelpSection());
 
-                // add all the other ones from components
-                for (org.terasology.inGameHelpAPI.components.HelpItem helpItem :
-                        Iterables.filter(itemPrefab.iterateComponents(),
-                                org.terasology.inGameHelpAPI.components.HelpItem.class)) {
-                    if (helpItem != helpComponent) {
-                        documentData.addParagraphs(helpItem.getHelpSection());
-                    }
-                }
+                List<HelpItem> helpItems = Lists.newArrayList(helpComponent);
+                Iterables.filter(itemPrefab.iterateComponents(), HelpItem.class).forEach(helpItems::add);
+                itemsCategoryInGameHelpRegistry.getHelpItems(itemPrefab).forEach(helpItems::add);
 
-                // add all the other ones from code registered HelpItems
-                for (org.terasology.inGameHelpAPI.components.HelpItem helpItem :
-                        itemsCategoryInGameHelpRegistry.getHelpItems(itemPrefab)) {
-                    documentData.addParagraphs(helpItem.getHelpSection());
-                }
+                List<ParagraphData> allParagraphs = helpItems.stream()
+                        .sorted(Comparator.comparing(HelpItem::getTitle))
+                        .distinct()
+                        .map(HelpItem::getHelpSection)
+                        .flatMap(List::stream)
+                        .collect(Collectors.toList());
+
+                documentData.addParagraphs(allParagraphs);
 
                 items.add(new ItemHelpEntry(itemPrefab.getName(), displayName, documentData));
             }
@@ -163,7 +162,9 @@ public class ItemsCategory implements HelpCategory {
      */
     @Override
     public DocumentData getDocumentData() {
-        initialise();
+        if (rootDocument == null) {
+            initialise();
+        }
         if (currentDocument == null) {
             return rootDocument;
         } else {
