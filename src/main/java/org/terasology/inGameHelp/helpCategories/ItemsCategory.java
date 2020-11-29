@@ -1,62 +1,61 @@
-/*
- * Copyright 2015 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.inGameHelp.helpCategories;
 
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Maps;
-import org.terasology.inGameHelpAPI.ItemsCategoryInGameHelpRegistry;
-import org.terasology.inGameHelpAPI.components.HelpItem;
-import org.terasology.inGameHelpAPI.systems.HelpCategory;
-import org.terasology.utilities.Assets;
+import com.google.common.collect.Lists;
 import org.terasology.entitySystem.prefab.Prefab;
+import org.terasology.inGameHelpAPI.ItemsCategoryInGameHelpRegistry;
 import org.terasology.inGameHelpAPI.components.ItemHelpComponent;
+import org.terasology.inGameHelpAPI.systems.HelpCategory;
 import org.terasology.inGameHelpAPI.ui.ItemWidget;
 import org.terasology.inGameHelpAPI.ui.WidgetFlowRenderable;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.rendering.assets.font.Font;
 import org.terasology.rendering.nui.widgets.browser.data.DocumentData;
+import org.terasology.rendering.nui.widgets.browser.data.ParagraphData;
 import org.terasology.rendering.nui.widgets.browser.data.basic.FlowParagraphData;
 import org.terasology.rendering.nui.widgets.browser.data.basic.flow.TextFlowRenderable;
 import org.terasology.rendering.nui.widgets.browser.data.html.HTMLDocument;
-import org.terasology.rendering.nui.widgets.browser.ui.style.ContainerInteger;
-import org.terasology.rendering.nui.widgets.browser.ui.style.FixedContainerInteger;
-import org.terasology.rendering.nui.widgets.browser.ui.style.ParagraphRenderStyle;
 import org.terasology.rendering.nui.widgets.browser.ui.style.TextRenderStyle;
+import org.terasology.utilities.Assets;
 
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Help category that manages the Items tab.
  */
 public class ItemsCategory implements HelpCategory {
-    
-    /** Name of this category */
+
+    /**
+     * Name of this category
+     */
     private final String name = "Items";
 
-    /** Reference to the {@link org.terasology.inGameHelpAPI.ItemsCategoryInGameHelpRegistry} that determines which prefabs are associated with this. */
+    /**
+     * Reference to the {@link org.terasology.inGameHelpAPI.ItemsCategoryInGameHelpRegistry} that determines which
+     * prefabs are associated with this.
+     */
     private final ItemsCategoryInGameHelpRegistry itemsCategoryInGameHelpRegistry;
 
-    /** Map of prefab names to help documents that are associated with the prefabs. */
-    Map<String, DocumentData> items = Maps.newHashMap();
+    /**
+     * Sorted list of item help entries with hyperlink and document data attached.
+     */
+    private final List<ItemHelpEntry> items = Lists.newArrayList();
 
-    /** The root HTML document. */
-    HTMLDocument rootDocument;
+    /**
+     * The root HTML document.
+     */
+    private HTMLDocument rootDocument;
 
-    /** The current document data. */
-    DocumentData currentDocument;
+    /**
+     * The current document data.
+     */
+    private DocumentData currentDocument;
 
     /**
      * Constructor for this help category.
@@ -68,11 +67,11 @@ public class ItemsCategory implements HelpCategory {
     }
 
     public void setRegistry(ItemsCategoryInGameHelpRegistry registry) {
-
     }
 
     /**
-     * Initialises the help category. Sets the font and padding. Creates the documents then adds help item information to the documents.
+     * Initialises the help category. Sets the font and padding. Creates the documents then adds help item information
+     * to the documents.
      */
     private void initialise() {
         TextRenderStyle titleRenderStyle = new TextRenderStyle() {
@@ -84,24 +83,17 @@ public class ItemsCategory implements HelpCategory {
                 return Assets.getFont("engine:NotoSans-Regular-Title").get();
             }
         };
-        ParagraphRenderStyle titleParagraphStyle = new ParagraphRenderStyle() {
-            /**
-             * @return a fixed container integer of size 5
-             */
-            @Override
-            public ContainerInteger getParagraphPaddingTop() {
-                return new FixedContainerInteger(5);
-            }
-        };
 
         //Create the root document and add the item list paragraph that contains the items
         rootDocument = new HTMLDocument(null);
         FlowParagraphData itemListParagraph = new FlowParagraphData(null);
         rootDocument.addParagraph(itemListParagraph);
-        
+
+        final Map<String, String> displayNames = new HashMap<>();
+
         //add all applicable prefabs to the document
         for (Prefab itemPrefab : itemsCategoryInGameHelpRegistry.getKnownPrefabs()) {
-            HTMLDocument documentData = new HTMLDocument(null);
+
             ItemHelpComponent helpComponent = itemPrefab.getComponent(ItemHelpComponent.class);
             if (helpComponent == null) {
                 helpComponent = new ItemHelpComponent();
@@ -109,36 +101,49 @@ public class ItemsCategory implements HelpCategory {
             }
 
             if (getCategoryName().equalsIgnoreCase(helpComponent.getCategory())) {
-                FlowParagraphData imageNameParagraph = new FlowParagraphData(null);
-                documentData.addParagraph(imageNameParagraph);
-                imageNameParagraph.append(new WidgetFlowRenderable(new ItemWidget(itemPrefab.getName()), 48, 48, itemPrefab.getName()));
-                DisplayNameComponent displayNameComponent = itemPrefab.getComponent(DisplayNameComponent.class);
-                if (displayNameComponent != null) {
-                    imageNameParagraph.append(new TextFlowRenderable(displayNameComponent.name, titleRenderStyle, null));
-                } else {
-                    imageNameParagraph.append(new TextFlowRenderable(itemPrefab.getName(), titleRenderStyle, null));
-                }
 
-                helpComponent.addHelpItemSection(documentData);
+                String displayName =
+                        Optional.ofNullable(itemPrefab.getComponent(DisplayNameComponent.class))
+                                .map(c -> c.name)
+                                .orElse(itemPrefab.getName());
+                displayNames.put(displayName, itemPrefab.getName());
+
+                HTMLDocument documentData = new HTMLDocument(null);
+
+                documentData.addParagraph(getImageNameParagraph(itemPrefab.getName(), displayName, titleRenderStyle));
+                documentData.addParagraphs(helpComponent.getHelpSection());
 
                 // add all the other ones from components
-                for (HelpItem helpItem : Iterables.filter(itemPrefab.iterateComponents(), HelpItem.class)) {
+                for (org.terasology.inGameHelpAPI.components.HelpItem helpItem :
+                        Iterables.filter(itemPrefab.iterateComponents(),
+                                org.terasology.inGameHelpAPI.components.HelpItem.class)) {
                     if (helpItem != helpComponent) {
-                        helpItem.addHelpItemSection(documentData);
+                        documentData.addParagraphs(helpItem.getHelpSection());
                     }
                 }
 
                 // add all the other ones from code registered HelpItems
-                for (HelpItem helpItem : itemsCategoryInGameHelpRegistry.getHelpItems(itemPrefab)) {
-                    helpItem.addHelpItemSection(documentData);
+                for (org.terasology.inGameHelpAPI.components.HelpItem helpItem :
+                        itemsCategoryInGameHelpRegistry.getHelpItems(itemPrefab)) {
+                    documentData.addParagraphs(helpItem.getHelpSection());
                 }
 
-                items.put(itemPrefab.getName(), documentData);
-
-                // add this to the root document
-                itemListParagraph.append(new WidgetFlowRenderable(new ItemWidget(itemPrefab.getName()), 48, 48, itemPrefab.getName()));
+                items.add(new ItemHelpEntry(itemPrefab.getName(), displayName, documentData));
             }
         }
+        items.stream()
+                .sorted(Comparator.comparing(ItemHelpEntry::getDisplayName))
+                .map(ItemHelpEntry::getHyperlink)
+                .forEach(hyperlink ->
+                        itemListParagraph.append(
+                                new WidgetFlowRenderable(new ItemWidget(hyperlink), 48, 48, hyperlink)));
+    }
+
+    private ParagraphData getImageNameParagraph(String prefabName, String displayName, TextRenderStyle renderStyle) {
+        FlowParagraphData paragraph = new FlowParagraphData(null);
+        paragraph.append(new WidgetFlowRenderable(new ItemWidget(prefabName), 48, 48, prefabName));
+        paragraph.append(new TextFlowRenderable(displayName, renderStyle, null));
+        return paragraph;
     }
 
     /**
@@ -183,13 +188,17 @@ public class ItemsCategory implements HelpCategory {
     @Override
     public boolean handleNavigate(String hyperlink) {
         if (items.size() == 0) {
-            // handle the case where we navigate before we have shown the screen.  There is probably a better way to do this.
+            // handle the case where we navigate before we have shown the screen.  There is probably a better way to
+            // do this.
             initialise();
         }
 
+        Optional<DocumentData> target =
+                items.stream().filter(item -> item.getHyperlink().equals(hyperlink)).findFirst().map(ItemHelpEntry::getDocumentData);
+
         //goes to document referenced by hyperlink if it is found
-        if (items.containsKey(hyperlink)) {
-            currentDocument = items.get(hyperlink);
+        if (target.isPresent()) {
+            currentDocument = target.get();
             return true;
         } else {
             return false;
