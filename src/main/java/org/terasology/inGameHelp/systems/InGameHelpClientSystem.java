@@ -83,7 +83,7 @@ public class InGameHelpClientSystem extends BaseComponentSystem implements InGam
                         return key;
                     }
                 })
-                .map(key -> FontColor.getColored(key, new Color(0xFFFF00FF)))
+                .map(key -> FontColor.getColored(key, Color.yellow))
                 .orElse(FontColor.getColored("n/a", Color.red));
     }
 
@@ -93,7 +93,7 @@ public class InGameHelpClientSystem extends BaseComponentSystem implements InGam
             Notification notification = new Notification(NOTIFICATION_ID,
                     "Where's the Manual?",
                     "Press " + getActivationKey(new SimpleUri("InGameHelp:inGameHelp")) + " for in-game help",
-                    "CoreAssets:icons#bubble");
+                    "engine:items#blueBook");
             localPlayer.getClientEntity().send(new ShowNotificationEvent(notification));
         }
     }
