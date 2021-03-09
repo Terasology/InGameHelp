@@ -15,18 +15,18 @@
  */
 package org.terasology.inGameHelp.systems;
 
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.registry.Share;
 import org.terasology.inGameHelp.InGameHelpCategoryRegistry;
 import org.terasology.inGameHelp.helpCategories.GeneralHelpCategory;
 import org.terasology.inGameHelp.helpCategories.ItemsCategory;
 import org.terasology.inGameHelpAPI.ItemsCategoryInGameHelpRegistry;
 import org.terasology.inGameHelpAPI.event.OnAddNewCategoryEvent;
 import org.terasology.inGameHelpAPI.systems.HelpCategory;
-import org.terasology.registry.In;
-import org.terasology.registry.Share;
 
 import java.util.ArrayList;
 import java.util.List;

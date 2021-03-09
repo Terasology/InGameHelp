@@ -3,7 +3,7 @@
 
 package org.terasology.inGameHelp.helpCategories;
 
-import org.terasology.rendering.nui.widgets.browser.data.DocumentData;
+import org.terasology.engine.rendering.nui.widgets.browser.data.DocumentData;
 
 class ItemHelpEntry {
     private final String hyperlink;

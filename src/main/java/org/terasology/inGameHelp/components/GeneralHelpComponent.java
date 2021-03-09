@@ -16,10 +16,10 @@
 package org.terasology.inGameHelp.components;
 
 import com.google.common.collect.Lists;
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.entitySystem.Component;
+import org.terasology.engine.rendering.nui.widgets.browser.data.ParagraphData;
+import org.terasology.engine.rendering.nui.widgets.browser.data.basic.HTMLLikeParser;
 import org.terasology.inGameHelpAPI.components.HelpItem;
-import org.terasology.rendering.nui.widgets.browser.data.ParagraphData;
-import org.terasology.rendering.nui.widgets.browser.data.basic.HTMLLikeParser;
 
 import java.util.ArrayList;
 import java.util.List;

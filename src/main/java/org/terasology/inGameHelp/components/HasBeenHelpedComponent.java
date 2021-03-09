@@ -15,7 +15,7 @@
  */
 package org.terasology.inGameHelp.components;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.entitySystem.Component;
 
 /**
  * Component for when the user has been helped. 

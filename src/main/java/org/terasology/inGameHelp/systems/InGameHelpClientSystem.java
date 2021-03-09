@@ -2,31 +2,31 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.inGameHelp.systems;
 
-import org.terasology.engine.SimpleUri;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterMode;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.core.SimpleUri;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterMode;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.input.InputSystem;
+import org.terasology.engine.logic.players.LocalPlayer;
+import org.terasology.engine.logic.players.event.LocalPlayerInitializedEvent;
+import org.terasology.engine.network.ClientComponent;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.registry.Share;
+import org.terasology.engine.rendering.nui.NUIManager;
+import org.terasology.engine.unicode.EnclosedAlphanumerics;
 import org.terasology.inGameHelp.InGameHelpClient;
 import org.terasology.inGameHelp.components.HasBeenHelpedComponent;
 import org.terasology.inGameHelp.ui.InGameHelpButton;
 import org.terasology.inGameHelp.ui.InGameHelpScreen;
 import org.terasology.input.ButtonState;
 import org.terasology.input.Input;
-import org.terasology.input.InputSystem;
-import org.terasology.logic.players.LocalPlayer;
-import org.terasology.logic.players.event.LocalPlayerInitializedEvent;
-import org.terasology.network.ClientComponent;
+import org.terasology.notifications.events.ExpireNotificationEvent;
 import org.terasology.notifications.events.ShowNotificationEvent;
 import org.terasology.notifications.model.Notification;
-import org.terasology.notifications.events.ExpireNotificationEvent;
 import org.terasology.nui.Color;
 import org.terasology.nui.FontColor;
-import org.terasology.registry.In;
-import org.terasology.registry.Share;
-import org.terasology.rendering.nui.NUIManager;
-import org.terasology.unicode.EnclosedAlphanumerics;
 
 /**
  * Class that handles button events and displays the help screen to the client.
@@ -38,7 +38,7 @@ public class InGameHelpClientSystem extends BaseComponentSystem implements InGam
     private static final String NOTIFICATION_ID = "InGameHelp:firstTime";
 
     /**
-     * Reference to the {@link org.terasology.rendering.nui.NUIManager}, used for adding user interace elements and
+     * Reference to the {@link org.terasology.engine.rendering.nui.NUIManager}, used for adding user interace elements and
      * displaying the help screen.
      */
     @In

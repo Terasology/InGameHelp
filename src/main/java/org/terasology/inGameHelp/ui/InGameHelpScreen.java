@@ -2,14 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.inGameHelp.ui;
 
+import org.terasology.engine.registry.CoreRegistry;
+import org.terasology.engine.rendering.nui.CoreScreenLayer;
+import org.terasology.engine.rendering.nui.widgets.browser.ui.BrowserHyperlinkListener;
+import org.terasology.engine.rendering.nui.widgets.browser.ui.BrowserWidget;
 import org.terasology.inGameHelp.InGameHelpCategoryRegistry;
 import org.terasology.inGameHelpAPI.systems.HelpCategory;
-import org.terasology.registry.CoreRegistry;
-import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.nui.layouts.FlowLayout;
 import org.terasology.nui.widgets.UIButton;
-import org.terasology.rendering.nui.widgets.browser.ui.BrowserHyperlinkListener;
-import org.terasology.rendering.nui.widgets.browser.ui.BrowserWidget;
 
 /**
  * Implementation for the help screen.
