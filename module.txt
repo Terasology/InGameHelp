@@ -1,14 +1,27 @@
 {
     "id": "InGameHelp",
-    "version": "1.1.0-SNAPSHOT",
+    "version": "1.2.0-SNAPSHOT",
     "author": "The Terasology Foundation",
     "displayName": "In-Game Help",
     "description": "Adds an in-game help window primarily for items (what it does, what it is, etc.)",
     "dependencies": [
-        { "id": "CoreAssets", "minVersion": "2.0.0" },
-        { "id": "InGameHelpAPI", "minVersion": "1.0.0" },
-        { "id": "Inventory", "minVersion": "1.1.0" },
-        { "id": "Notifications", "minVersion": "0.1.0", "maxVersion": "0.3.0" }
+        {
+            "id": "CoreAssets",
+            "minVersion": "2.0.0"
+        },
+        {
+            "id": "InGameHelpAPI",
+            "minVersion": "1.0.0"
+        },
+        {
+            "id": "Inventory",
+            "minVersion": "1.1.0"
+        },
+        {
+            "id": "Notifications",
+            "minVersion": "0.1.0",
+            "maxVersion": "0.3.0"
+        }
     ],
     "serverSideOnly": false,
     "isAugmentation": true
