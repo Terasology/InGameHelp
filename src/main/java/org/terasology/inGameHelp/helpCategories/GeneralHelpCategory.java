@@ -15,7 +15,7 @@
  */
 package org.terasology.inGameHelp.helpCategories;
 
-import org.terasology.assets.ResourceUrn;
+import org.terasology.gestalt.assets.ResourceUrn;
 import org.terasology.engine.entitySystem.prefab.Prefab;
 import org.terasology.engine.rendering.nui.widgets.browser.data.DocumentData;
 import org.terasology.engine.rendering.nui.widgets.browser.data.basic.HTMLLikeParser;
