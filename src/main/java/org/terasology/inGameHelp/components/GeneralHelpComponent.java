@@ -18,7 +18,7 @@ public class GeneralHelpComponent implements Component<GeneralHelpComponent>, He
     /** Title of this component. */
     public String title;
 
-    /** Name of this help category. */ 
+    /** Name of this help category. */
     public String category = "General";
 
     /** Description of this help item. */
@@ -52,5 +52,13 @@ public class GeneralHelpComponent implements Component<GeneralHelpComponent>, He
             result.add(HTMLLikeParser.parseHTMLLikeParagraph(null, paragraph));
         }
         return result;
+    }
+
+    @Override
+    public void copy(GeneralHelpComponent other) {
+        this.title = other.title;
+        this.category = other.category;
+        this.paragraphText.clear();
+        this.paragraphText.addAll(other.paragraphText);
     }
 }
