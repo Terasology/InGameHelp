@@ -10,7 +10,7 @@ import org.terasology.gestalt.entitysystem.component.Component;
  */
 public class HasBeenHelpedComponent implements Component<HasBeenHelpedComponent> {
     @Override
-    public void copy(HasBeenHelpedComponent other) {
+    public void copyFrom(HasBeenHelpedComponent other) {
 
     }
 }

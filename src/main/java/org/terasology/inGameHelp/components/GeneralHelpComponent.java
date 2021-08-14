@@ -55,7 +55,7 @@ public class GeneralHelpComponent implements Component<GeneralHelpComponent>, He
     }
 
     @Override
-    public void copy(GeneralHelpComponent other) {
+    public void copyFrom(GeneralHelpComponent other) {
         this.title = other.title;
         this.category = other.category;
         this.paragraphText.clear();
