@@ -16,11 +16,11 @@
 package org.terasology.inGameHelp.systems;
 
 import org.terasology.engine.entitySystem.entity.EntityRef;
-import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.registry.Share;
+import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
 import org.terasology.inGameHelp.InGameHelpCategoryRegistry;
 import org.terasology.inGameHelp.helpCategories.GeneralHelpCategory;
 import org.terasology.inGameHelp.helpCategories.ItemsCategory;
